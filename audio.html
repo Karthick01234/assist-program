@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MediaCapture and Streams API</title>
+    <meta name="viewport" content="width=device-width">
+</head>
+<style>
+  #hlo {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+  }
+</style>
+<body onload="my()"> 
+<div id="cat" style="display:j"> 
+<audio id="hlo" controls> </audio>
+</div>
+<div id="ul1" style="display:none">
+<audio id="kee" controls> </audio>
+</div>
+<div style="display:none" class="container">
+<a id="o"> </a> <br> <br>
+<h3 align="middle"> TEXT TO SPEECH </h3> <br>
+<textarea id="myText"> </textarea> <br> <br>
+<label> 
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<select style="width:300px;height:40px" id="voiceOptions"></select>
+</label> <br> <br>
+<label>
+<span> Volume </span> <br> <br>
+<input type="range" id="volumeSlider" min="0" max="1" value="1" step="0.1" />
+</label> <br> <br>
+<label>
+<span> rate </span> <br> <br>
+<input type="range" id="rateSlider" min="0" max="1" value="0.7" step="0.1" />
+</label> <br> <br>
+<label>
+<span> Pitch </span>  <br> <br>
+<input type="range" id="pitchSlider" min="0" max="1" value="0.9" step="0.1" />
+</label> <br> <br>
+</div>
+<script>
+var cat = document.getElementById('cat');
+var ul1 = document.getElementById('ul1');
+var kee = document.getElementById('kee');
+var video = document.getElementById('hlo');
+var chunks = [];
+var pika = document.getElementById('o');
+var voiceOptions = document.getElementById('voiceOptions');
+var volumeSlider = document.getElementById('volumeSlider');
+var rateSlider = document.getElementById('rateSlider');
+var pitchSlider = document.getElementById('pitchSlider');
+var myText = document.getElementById('myText');
+var synt = window.speechSynthesis;
+var voiceMap = [];
+function my() { 
+		navigator.mediaDevices.getUserMedia({
+		  audio: true,
+		  video: false
+		  }).then(stream =>  {
+		    video.srcObject = stream; 
+			var track = stream.getTracks();
+			var a = setTimeout(() => {
+			los();
+			},10000);
+			}).catch(console.error);
+		}
+function loadVoices() {
+  var voices = synt.getVoices();
+  for (var i=0;i<voices.length;i++) {
+    var voice=voices[i];
+	var options = document.createElement('option');
+	options.value = voice.name;
+	options.innerHTML = voice.name;
+	voiceOptions.appendChild(options);
+	voiceMap[voice.name] = voice;
+	};
+	};
+	speechSynthesis.onvoiceschanged = function(e) {
+	   loadVoices();
+	   };
+    function me() {
+	    var k = myText.value;
+	    var kar = k*60*1000;
+		navigator.mediaDevices.getUserMedia({
+		  audio: true,
+		  video: false
+		  }).then(stream =>  {
+		    video.srcObject = stream; 
+			var recorder = new MediaRecorder(stream, { type: "audio/mp3" });
+	        recorder.start();
+			recorder.ondataavailable = e => {
+	        chunks.push(e.data);
+			var blob = new Blob(chunks, { type: "audio/mp3" });
+            var videoURL = window.URL.createObjectURL(blob);
+            kee.src = videoURL;
+			pika.href = videoURL;
+			var d = new Date();
+			pika.download = d+".mp3";
+			pika.click();
+			};
+			var track = stream.getTracks();
+			setTimeout(() => {
+			recorder.stop();
+			s();
+			},kar);
+		  }).catch(console.error);
+		  }
+	function s() {
+	    cat.style="display:none";
+		ul1.style="display:j";
+		setTimeout(() => {
+		cas1();
+	},5000);
+	}
+	function los() {
+	var me = 'how many minutes you want to record kaarthick ';
+	var msg = new SpeechSynthesisUtterance();
+	msg.volume = volumeSlider.value;
+	msg.voice = voiceMap[voiceOptions.value];
+    msg.rate = rateSlider.value;
+	msg.pitch = pitchSlider.value;
+	msg.text = me;
+	synt.speak(msg);
+	msg.onend = function(e) {
+		los1();
+    }
+	}
+function los1() {
+var finalTranscripts = '';
+var interimTranscripts = '';
+if('webkitSpeechRecognition' in window) {
+var speechRecognizer = new webkitSpeechRecognition();
+speechRecognizer.continuous = false;
+speechRecognizer.interimResults = true;
+speechRecognizer.lang = 'en-IN';
+speechRecognizer.start();
+
+
+
+speechRecognizer.onresult = function(eve) {
+	for(var i=eve.resultIndex;i<eve.results.length;i++) {
+	  var transcript = eve.results[i][0].transcript;
+	  if(eve.results[i].isFinal) {
+	    finalTranscripts += transcript;
+	  }
+	  else {
+	    interimTranscripts += transcript;
+		}
+		}
+		myText.innerHTML = finalTranscripts;
+		if(!myText.innerHTML) {
+		}
+		else {
+		me();
+		} 
+};
+speechRecognizer.onerror = function(eve) {
+};
+}
+else {
+ alert("upgrade");
+ }
+};
+function cas1() {
+	var me = 'you want to record one more time';
+	var msg = new SpeechSynthesisUtterance();
+	msg.volume = volumeSlider.value;
+	msg.voice = voiceMap[voiceOptions.value];
+    msg.rate = rateSlider.value;
+	msg.pitch = pitchSlider.value;
+	msg.text = me;
+	synt.speak(msg);
+	msg.onend = function(e) {
+		cas2();
+    }
+	}
+function cas2() {
+var finalTranscripts = '';
+var interimTranscripts = '';
+if('webkitSpeechRecognition' in window) {
+var speechRecognizer = new webkitSpeechRecognition();
+speechRecognizer.continuous = false;
+speechRecognizer.interimResults = false;
+speechRecognizer.lang = 'en-IN';
+speechRecognizer.start();
+
+
+
+speechRecognizer.onresult = function(eve) {
+	for(var i=eve.resultIndex;i<eve.results.length;i++) {
+	  var transcript = eve.results[i][0].transcript;
+	  if(eve.results[i].isFinal) {
+	    finalTranscripts += transcript;
+	  }
+	  else {
+	    interimTranscripts += transcript;
+		}
+		}
+		myText.innerHTML = finalTranscripts;
+		if(!myText.innerHTML) {
+		}
+		else {
+		  cas3();
+		}
+		
+};
+speechRecognizer.onerror = function(eve) {
+};
+}
+else {
+ alert("upgrade");
+ }
+};
+function cas3() {
+  if(myText.value == 'yes' || myText.value == 'YES') {
+   window.location="audio.html";
+  }
+  else if(myText.value == 'no go to gallery' || myText.value == 'no show my gallery' || myText.value == 'No Go To Gallery' || myText.value == 'No Show My Gallery') {
+    window.location="gallery.html";
+	}
+  else {
+    window.location="index2.html";
+  }
+};
+</script>
+</body>
+</html>

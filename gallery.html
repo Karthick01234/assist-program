@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> hii </title>
+</head>
+<body onload="my()">
+<div style="display:none">
+<textarea id="myText"> </textarea> <br> <br>
+</div>
+<script>
+var myText = document.getElementById('myText');
+ function my() {
+   window.open("file:///sdcard/Download");
+   setTimeout(() => {
+		cas2();
+	},10000);
+ };
+ function cas2() {
+var finalTranscripts = '';
+var interimTranscripts = '';
+if('webkitSpeechRecognition' in window) {
+var speechRecognizer = new webkitSpeechRecognition();
+speechRecognizer.continuous = false;
+speechRecognizer.interimResults = true;
+speechRecognizer.lang = 'en-IN';
+speechRecognizer.start();
+
+
+
+speechRecognizer.onresult = function(eve) {
+	for(var i=eve.resultIndex;i<eve.results.length;i++) {
+	  var transcript = eve.results[i][0].transcript;
+	  if(eve.results[i].isFinal) {
+	    finalTranscripts += transcript;
+	  }
+	  else {
+	    interimTranscripts += transcript;
+		}
+		}
+		myText.innerHTML = finalTranscripts;
+		if(!myText.innerHTML) {
+		}
+		else {
+		  cas3();
+		}
+		
+};
+speechRecognizer.onerror = function(eve) {
+};
+}
+else {
+ alert("upgrade");
+ }
+};
+function cas3() {
+  if(myText.value == 'go back' || myText.value == 'Go Back' || myText.value == 'GO BACK') {
+   window.location="index.html";
+  }
+  else {
+    cas2();
+  }
+};
+</script>
+</body>
+</html>

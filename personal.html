@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> hii </title>
+</head>
+<body onload="my()"> 
+<div align="middle" class="container">
+<div style="display:none">
+<h3 align="middle"> TEXT TO SPEECH </h3> <br>
+<textarea id="myText"> </textarea> <br> <br>
+<label> 
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<select style="width:300px;height:40px" id="voiceOptions"></select>
+</label> <br> <br>
+<audio id="kee" controls> </audio>
+</div>
+<div style="display:none">
+<label>
+<span> Volume </span> <br> <br>
+<input type="range" id="volumeSlider" min="0" max="1" value="1" step="0.1" />
+</label> <br> <br>
+<label>
+<span> rate </span> <br> <br>
+<input type="range" id="rateSlider" min="0" max="1" value="0.7" step="0.1" />
+</label> <br> <br>
+<label>
+<span> Pitch </span>  <br> <br>
+<input type="range" id="pitchSlider" min="0" max="1" value="0.9" step="0.1" />
+</label> <br> <br>
+</div>
+</div>
+<script>
+var video = document.getElementById('kee');
+function my() {
+		navigator.mediaDevices.getUserMedia({
+		  audio: true,
+		  video: false
+		  }).then(stream =>  {
+		    video.srcObject = stream; 
+			var track = stream.getTracks();
+			var a = setTimeout(() => {
+			ke();
+			},10000);
+			}).catch(console.error);
+		}
+function ke() {
+    var me = 'you want to do call or sms';
+	var msg = new SpeechSynthesisUtterance();
+	msg.volume = volumeSlider.value;
+	msg.voice = voiceMap[voiceOptions.value];
+	msg.rate = rateSlider.value;
+	msg.pitch = pitchSlider.value;
+	msg.text = me;
+	synt.speak(msg);
+	msg.onend = function(e) {
+	me1();
+	}
+    }
+function me1() {
+var finalTranscripts = '';
+var interimTranscripts = '';
+if('webkitSpeechRecognition' in window) {
+var speechRecognizer = new webkitSpeechRecognition();
+speechRecognizer.continuous = false;
+speechRecognizer.interimResults = true;
+speechRecognizer.lang = 'en-IN';
+speechRecognizer.start();
+
+
+
+speechRecognizer.onresult = function(eve) {
+	for(var i=eve.resultIndex;i<eve.results.length;i++) {
+	  var transcript = eve.results[i][0].transcript;
+	  if(eve.results[i].isFinal) {
+	    finalTranscripts += transcript;
+	  }
+	  else {
+	    interimTranscripts += transcript;
+		}
+		}
+		myText.innerHTML = finalTranscripts;
+		if(!myText.innerHTML) {
+		}
+		else {
+		  kar();
+		}
+		
+};
+speechRecognizer.onerror = function(eve) {
+};
+}
+else {
+ alert("upgrade");
+ }
+};
+var voiceOptions = document.getElementById('voiceOptions');
+var volumeSlider = document.getElementById('volumeSlider');
+var rateSlider = document.getElementById('rateSlider');
+var pitchSlider = document.getElementById('pitchSlider');
+var myText = document.getElementById('myText');
+var synt = window.speechSynthesis;
+var voiceMap = [];
+
+function loadVoices() {
+  var voices = synt.getVoices();
+  for (var i=0;i<voices.length;i++) {
+    var voice=voices[i];
+	var options = document.createElement('option');
+	options.value = voice.name;
+	options.innerHTML = voice.name;
+	voiceOptions.appendChild(options);
+	voiceMap[voice.name] = voice;
+	};
+	};
+	speechSynthesis.onvoiceschanged = function(e) {
+	   loadVoices();
+	   };
+function kar() {
+    if(myText.value == 'call' || myText.value == 'calling' || myText.value == 'called' || myText.value == 'Call' ) {
+      var me = 'Tell a number you want to call';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+		a();
+	  }
+    }
+	else if(myText.value == 'exit' || myText.value == 'Exit' || myText.value == 'EXIT') {
+	  var me = 'exiting personal use mode';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+		b();
+	  }
+	}
+	else {
+	  var me = 'Cannot recognize your words';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+		me1();
+	  }
+	}
+};
+function a() {
+var finalTranscripts = '';
+var interimTranscripts = '';
+if('webkitSpeechRecognition' in window) {
+var speechRecognizer = new webkitSpeechRecognition();
+speechRecognizer.continuous = false;
+speechRecognizer.interimResults = true;
+speechRecognizer.lang = 'en-IN';
+speechRecognizer.start();
+
+
+
+speechRecognizer.onresult = function(eve) {
+	for(var i=eve.resultIndex;i<eve.results.length;i++) {
+	  var transcript = eve.results[i][0].transcript;
+	  if(eve.results[i].isFinal) {
+	    finalTranscripts += transcript;
+	  }
+	  else {
+	    interimTranscripts += transcript;
+		}
+		}
+		myText.innerHTML = finalTranscripts;
+		if(!myText.innerHTML) {
+		}
+		else {
+		  window.open('tel:'+myText.value);
+		}
+
+};
+speechRecognizer.onerror = function(eve) {
+};
+}
+else {
+ alert("upgrade");
+ }
+};
+function b() {
+   window.location="index2.html";
+};
+</script>
+</body>
+</html>

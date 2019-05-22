@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> hii </title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+</head>
+<body onload="my();">
+<div align="middle" class="container">
+<div style="display:none">
+<h3 align="middle"> TEXT TO SPEECH </h3> <br>
+<textarea id="myText"> </textarea> <br> <br>
+</div>
+<label> 
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
+<select style="width:300px;height:40px" id="voiceOptions"></select>
+</label> <br> <br>
+<img src="k.gif" style="border-radius:50%;width:180px;height:180px" /> <br> <br>
+<div style="display:none">
+<audio id="kee" controls> </audio> <br> <br>
+<label>
+<span> Volume </span> <br> <br>
+<input type="range" id="volumeSlider" min="0" max="1" value="1" step="0.1" />
+</label> <br> <br>
+<label>
+<span> rate </span> <br> <br>
+<input type="range" id="rateSlider" min="0" max="1" value="0.7" step="0.1" />
+</label> <br> <br>
+<label>
+<span> Pitch </span>  <br> <br>
+<input type="range" id="pitchSlider" min="0" max="1" value="0.9" step="0.1" />
+</label> <br> <br>
+</div>
+</div>
+<script>
+var voiceOptions = document.getElementById('voiceOptions');
+var volumeSlider = document.getElementById('volumeSlider');
+var rateSlider = document.getElementById('rateSlider');
+var pitchSlider = document.getElementById('pitchSlider');
+var myText = document.getElementById('myText');
+var synt = window.speechSynthesis;
+var voiceMap = [];
+var video = document.getElementById('kee');
+function my() { 
+		navigator.mediaDevices.getUserMedia({
+		  audio: true,
+		  video: false
+		  }).then(stream =>  {
+		    video.srcObject = stream; 
+			var track = stream.getTracks();
+			var a = setTimeout(() => {
+			hi();
+			},5000);
+			}).catch(console.error);
+		}
+function loadVoices() {
+  var voices = synt.getVoices();
+  for (var i=0;i<voices.length;i++) {
+    var voice=voices[i];
+	var options = document.createElement('option');
+	options.value = voice.name;
+	options.innerHTML = voice.name;
+	voiceOptions.appendChild(options);
+	voiceMap[voice.name] = voice;
+	};
+	};
+	speechSynthesis.onvoiceschanged = function(e) {
+	   loadVoices();
+	   };
+	function speak() {
+	if(myText.value == 'activate AI' || myText.value == 'activate ai') {
+	  var me = 'activating Jarvis online mode';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+	  window.location="ai.html";
+	  }
+	}
+	else if(myText.value == 'video record' || myText.value == 'record video' || myText.value == 'recording video' || myText.value == 'video recording') {
+	  var me = 'which camera you want to use front or back';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+	  hi();
+	  }
+	}
+    else if(myText.value == 'Take Selfie' || myText.value == 'selfie mode' || myText.value == 'take selfie'  || myText.value == 'selfie' || myText.value == 'Selfie') {
+	  var me = 'accessing camera ready for take selfie';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+	  window.location="selfie.html";
+	  }
+	}
+	else if(myText.value == 'Take Photo' || myText.value == 'capture environment' || myText.value == 'take photo') {
+	  var me = 'accessing camera ready for take photo';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+	  window.location="back.html";
+	  }
+	}
+	else if(myText.value == 'audio record' || myText.value == 'record audio' || myText.value == 'recording audio' || myText.value == 'audio recording') {
+      var me = 'accessing microphone activation successfull';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+	  window.location="audio.html";
+	  }
+	}
+	else if(myText.value == 'exit' || myText.value == 'Exit') {
+      var me = 'Now i am going to offline good bye kaarthick, have a nice day';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+	  window.location="bye.html";
+	}
+	}
+	else if(myText.value == 'person use' || myText.value == 'personal use') {
+	  var me = 'activating personal use mode';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+	  window.location="personal.html";
+	  }
+	}
+	else if(myText.value == 'gallery' || myText.value == 'my files' || myText.value == 'Gallery' || myText.value == 'My files' || myText.value == 'My file' || myText.value == 'My file') {
+	  var me ='Accessing your gallery here this are the items belongs to your gallery';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+	  window.location="gallery.html";
+	  }
+	}
+	else {
+	if(myText.value == 'front'  || myText.value == 'Front' || myText.value == 'FRONT'){
+	 window.location="hi.html";
+	}
+	else if(myText.value == 'back'  || myText.value == 'Back' || myText.value == 'BACK'){
+	 window.location="oi.html";
+	}
+	else {
+	 if(myText.value == 'hi Jarvis' || myText.value == 'hello Jarvis') {
+	  var me = 'hi kaarthick , what help you need from me';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+		hi();
+	  }
+	}
+	else {
+	  var me ='cannot recoginize your words';
+	  var msg = new SpeechSynthesisUtterance();
+	  msg.volume = volumeSlider.value;
+	  msg.voice = voiceMap[voiceOptions.value];
+	  msg.rate = rateSlider.value;
+	  msg.pitch = pitchSlider.value;
+	  msg.text = me;
+	  synt.speak(msg);
+	  msg.onend = function(e) {
+	  hi();
+	  }
+	  }
+	  }
+	  }
+	  };
+
+function hi() {
+var finalTranscripts = '';
+var interimTranscripts = '';
+if('webkitSpeechRecognition' in window) {
+var speechRecognizer = new webkitSpeechRecognition();
+speechRecognizer.continuous = false;
+speechRecognizer.interimResults = true;
+speechRecognizer.lang = 'en-IN';
+speechRecognizer.start();
+
+
+
+speechRecognizer.onresult = function(event) {
+	for(var i=event.resultIndex;i<event.results.length;i++) {
+	  var transcript = event.results[i][0].transcript;
+	  if(event.results[i].isFinal) {
+	    finalTranscripts += transcript;
+	  }
+	  else {
+	    interimTranscripts += transcript;
+		}
+		}
+		myText.innerHTML = finalTranscripts;
+		if(!myText.innerHTML) {
+		}
+		else {
+		  speak();
+		}
+};
+speechRecognizer.onerror = function(event) {
+};
+}
+else {
+ alert("upgrade");
+ }
+};	 
+</script>
+</body>
+</html>
